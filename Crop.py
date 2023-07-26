@@ -21,16 +21,17 @@ from torch.utils.data.dataset import Dataset
 
 from torchvision.transforms import transforms
 
-with open("F:\datas\新刷子误判数据\第3次清洗\data.json", 'r') as f:
-    temp = json.loads(f.read())
+# raw
+# with open("F:\datas\新刷子误判数据\第3次清洗\data.json", 'r') as f:
+#     temp = json.loads(f.read())
 
 
 def exist_objs(list_1, list_2, new_box_iou_limit=0.4):
-    '''
+    """
     list_1:当前slice的图像
     list_2:原图中的所有目标
     return:原图中位于当前slicze中的目标集合
-    '''
+    """
     return_objs = []
     # 当该原图无目标框时返回空列表
     if len(list_2) == 0:
@@ -625,7 +626,11 @@ class randomCenterCrop(Crop):
         image = self.dataSet[index]
         image_name = self.dataSet.get_name(index)
         labels = self.getLabel(index)
-        if image_name in temp:
+        way_to_load = str(input("\njson(press json) or not(not):\t"))
+        if way_to_load == 'json':
+            with open("F:\datas\新刷子误判数据\第3次清洗\data.json", 'r') as f:
+                temp = json.loads(f.read())
+
             retain_idx = temp[image_name]
             labels = labels[retain_idx]
         else:
@@ -668,41 +673,50 @@ class randomCenterCrop(Crop):
         return n_save_imgs
 
 # 随机切
-def randomCenter():
+def randomCenter(img_path, label_path, save_img, save_label, size):
     ########################################标签随机切####################################################
-    rc = randomCenterCrop((2000, 2000))
-    rc.inputImage(r'E:\虫体融合合成数据\虫体复制粘贴到背景\images')
-    rc.inputLabel(r'E:\虫体融合合成数据\虫体复制粘贴到背景\labels', coordinates='yolo')
+    rc = randomCenterCrop(size)
+    rc.inputImage(img_path)
+    rc.inputLabel(label_path, coordinates='yolo')
     # rc.showCopImage(16, new_box_iou_limit=0.35, )
     for num in range(1):
         for i in tqdm(list(range(len(rc.dataSet)))):
-            rc.saveSubImageAndTxt(i, r'E:\虫体融合合成数据\虫体复制粘贴到背景\切割训练\images', r'E:\虫体融合合成数据\虫体复制粘贴到背景\切割训练\labels',
+            rc.saveSubImageAndTxt(i, save_img, save_label,
                                   new_box_iou_limit=0.1,  # 标签iou舍弃，切出来iou大于该参数保留
-                                  resize=(1200, 1200))
+                                  resize=size)
 
 
 # 滑窗切割图片
-def slidingWindow():
+def slidingWindow(img_path, label_path, save_img, save_label, size):
     ##########################################滑窗切割###################################################################
-    sw = slidingWindowCrop(windowSize=(1200, 1200))  # 通过指定窗口宽高进行初始化
+    sw = slidingWindowCrop(windowSize=size)  # 通过指定窗口宽高进行初始化
 
     # 对滑动窗口对象传送数据
-    sw.inputImage(r'E:\Hoire2530\images\多于20只虫\种类多于15\images')
-    sw.inputLabel(r'F:\datas\test3\labels', coordinates='yolo')
+    sw.inputImage(img_path) # 传入图像路径
+    sw.inputLabel(label_path, coordinates='yolo') # 传入标签路径
     # sw.showImage(1, figsize=(12, 10))
     # sw.showSliceImage(1, overlap=0.5, new_box_iou_limit=0.35)
 
     # 切分并保存数据集中所有图片，子图保存到‘im'，子图标签保存到’la‘
     for i in range(len(sw.dataSet)):
-        sw.saveSubImageAndTxt(i, r'E:\Hoire184\二代模型识别后未清洗数据切割训练\images', r'E:\Hoire184\二代模型识别后未清洗数据切割训练\labels',
+        sw.saveSubImageAndTxt(i, save_img, save_label, # i, 保存图像路径, 保存标签路径
                               overlap=0,  # 滑窗堆叠率
                               new_box_iou_limit=0.4,  # 标签iou舍弃，切出来iou大于该参数保留
                               save_all=True,
-                              resize=(1200, 1200))
+                              resize=size)
         # sw.saveSubImage(i, 'im', overlap = 0.5)
         # sw.saveSubTxt(i, 'la', overlap=0.5, new_box_iou_limit=0.35,save_all = True)
 
 
+def del_sliding_rep(img_path, label_path):
+    # 如果 ?_?_1.jpg 与 ?_?_0.jpg 十分接近， 可利用此函数删除_1的批次图片以及标签 (?_0_? ~= ?_1_?)
+    return 0
+
 if __name__ == '__main__':
-    slidingWindow()  # 滑窗切图
-    # randomCenter()  # 随机切图
+    img_path_main = r'D:\StuData\tomato\20230116labeled\images'
+    label_path_main = r'D:\StuData\tomato\20230116labeled\labels'
+    save_img_main = r'D:\StuData\tomato\230116cropped\images'
+    save_label_main = r'D:\StuData\tomato\230116cropped\labels'
+    size_main = (640, 640)
+    slidingWindow(img_path_main, label_path_main, save_img_main, save_label_main, size_main)  # 滑窗切图
+    # randomCenter(img_path_main, label_path_main, save_img_main, save_label_main)  # 随机切图 --不会用
