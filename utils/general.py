@@ -566,7 +566,7 @@ def check_amp(model):
 
 def yaml_load(file='data.yaml'):
     # Single-line safe yaml loading
-    with open(file, errors='ignore') as f:
+    with open(file, errors='ignore', encoding='UTF-8') as f:
         return yaml.safe_load(f)
 
 

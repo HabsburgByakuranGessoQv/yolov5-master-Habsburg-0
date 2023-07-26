@@ -61,6 +61,7 @@ VOC/
 *_web_model/
 *_openvino_model/
 *_paddle_model/
+!weights
 darknet53.conv.74
 yolov3-tiny.conv.15
 

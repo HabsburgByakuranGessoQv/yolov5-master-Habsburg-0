@@ -65,11 +65,11 @@ def main(opt):
 def parse_opt(known=False):
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--img_path', default=r'D:\StuData\tomato\230116cropped\images', type=str, help='input img path')
+    parser.add_argument('--img_path', default=r'D:\StuData\tomato\kaggle\sum\leaf\images', type=str, help='input img path')
     parser.add_argument('--txt_path', default=r'D:\StuData\dataset_txt\tomato', type=str, help='output txt path')
     parser.add_argument('--train_val_percent', default='1.0', type=float, help='train+val:total -- percent') # 训练集和验证集所占比例。 这里没有划分测试集
     parser.add_argument('--train_percent', default='0.8', type=float, help='train:val -- percent') # 训练集所占比例，可自己进行调整
-    parser.add_argument('--aORw', default='w', type=str, help='a or w') # 追加写入a还是单纯默认写入w
+    parser.add_argument('--aORw', default='a', type=str, help='a or w') # 追加写入a还是单纯默认写入w
 
     return parser.parse_known_args()[0] if known else parser.parse_args()
 

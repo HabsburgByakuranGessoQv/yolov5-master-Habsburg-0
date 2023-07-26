@@ -1,0 +1,1 @@
+python detect.py --weights runs/train/Q_Tomato_5mCBAMC3_hypDe_multi-scale_1.1_Gooddataset/weights/best.pt  --source D:\StuData\tomato\采集20221220\小车手机\ --imgsz 1200 --hide-labels --conf-thres 0.4
