@@ -20,7 +20,7 @@ def background_txt_crate(data_path):
     list_index = range(num)
 
     for i in list_index:
-        renamed = 'background_leaf' + str(i) + '.'
+        renamed = 'background_bitter_gourd_' + str(i) + '.'
         label_name =  renamed + 'txt'
 
         img_name = renamed + total_img[i].split('.')[-1]
@@ -37,5 +37,5 @@ def background_txt_crate(data_path):
 
 
 if __name__ == '__main__':
-    main_path = r'D:\StuData\tomato\kaggle\sum\leaf'
+    main_path = r'D:\StuData\tomato\kaggle\sum\bitter_gourd'
     background_txt_crate(main_path)

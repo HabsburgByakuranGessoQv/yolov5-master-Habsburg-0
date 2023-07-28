@@ -74,5 +74,21 @@ def parse_opt(known=False):
     return parser.parse_known_args()[0] if known else parser.parse_args()
 
 if __name__ == '__main__':
-    opt = parse_opt()
-    main(opt)
+    datasets_list = [r'D:\StuData\tomato\kaggle\sum\apples',
+                     r'D:\StuData\tomato\kaggle\sum\banana',
+                     r'D:\StuData\tomato\kaggle\sum\bitter_gourd',
+                     r'D:\StuData\tomato\kaggle\sum\leaf',
+                     r'D:\StuData\tomato\kaggle\sum\orange',
+                     r'D:\StuData\tomato\230116cropped',
+                     r'D:\StuData\tomato\Public_dataset_1',
+                     ]
+    for i in datasets_list:
+        # print(datasets_list[0])
+        mode_write = 'w' if i == datasets_list[0] else 'a'
+        i = os.path.join(i, 'images')
+        print(i)
+        opt = parse_opt()
+        opt.img_path = i
+        opt.aORw = mode_write
+        # print(opt)
+        main(opt)
