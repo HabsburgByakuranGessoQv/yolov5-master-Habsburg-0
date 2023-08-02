@@ -428,9 +428,9 @@ if __name__ == '__main__':
     # YOLOv5m summary: 212 layers, 21172173 parameters, 21172173 gradients, 48.9 GFLOPs
     # YOLOv5s summary: 157 layers, 7225885 parameters, 7225885 gradients, 16.4 GFLOPs
     parser = argparse.ArgumentParser()
-    parser.add_argument('--cfg', type=str, default='yolov5mCBAMC3_1.yaml', help='model.yaml')
+    parser.add_argument('--cfg', type=str, default='yolov5s.yaml', help='model.yaml')
     parser.add_argument('--batch-size', type=int, default=1, help='total batch size for all GPUs')
-    parser.add_argument('--device', default='', help='cuda device, i.e. 0 or 0,1,2,3 or cpu')
+    parser.add_argument('--device', default='0', help='cuda device, i.e. 0 or 0,1,2,3 or cpu')
     parser.add_argument('--profile', action='store_true', help='profile model speed')
     parser.add_argument('--line-profile', action='store_true', help='profile model speed layer by layer')
     parser.add_argument('--test', action='store_true', help='test all yolo*.yaml')

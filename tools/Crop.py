@@ -713,10 +713,10 @@ def del_sliding_rep(img_path, label_path):
     return 0
 
 if __name__ == '__main__':
-    img_path_main = r'D:\StuData\tomato\20230116labeled\images'
-    label_path_main = r'D:\StuData\tomato\20230116labeled\labels'
-    save_img_main = r'D:\StuData\tomato\230116cropped\images'
-    save_label_main = r'D:\StuData\tomato\230116cropped\labels'
+    img_path_main = r'D:\StuData\tomato\kaggle\RipedandUnripedtomatoDataset\new\images'
+    label_path_main = r'D:\StuData\tomato\kaggle\RipedandUnripedtomatoDataset\new\labels'
+    save_img_main = r'D:\StuData\tomato\kaggle\RipedandUnripedtomatoDataset\clip\images'
+    save_label_main = r'D:\StuData\tomato\kaggle\RipedandUnripedtomatoDataset\clip\labels'
     size_main = (640, 640)
     slidingWindow(img_path_main, label_path_main, save_img_main, save_label_main, size_main)  # 滑窗切图
     # randomCenter(img_path_main, label_path_main, save_img_main, save_label_main)  # 随机切图 --不会用

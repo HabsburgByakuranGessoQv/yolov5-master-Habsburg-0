@@ -1,3 +1,4 @@
+# 该文件是用于将一个数据集中多种类标签改成单种类的标签, 即0.
 import os
 
 label_path = r'D:\StuData\tomato\kaggle\Riped and Unriped tomato Dataset\labels'

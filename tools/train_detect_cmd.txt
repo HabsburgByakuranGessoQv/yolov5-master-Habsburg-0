@@ -1,1 +1,23 @@
-python detect.py --weights runs/train/Q_Tomato_5mCBAMC3_hypDe_multi-scale_1.1_Gooddataset/weights/best.pt  --source D:\StuData\tomato\采集20221220\小车手机\ --imgsz 1200 --hide-labels --conf-thres 0.4
+python train.py --weights runs/train/5m_w5m_hypHi_Multi_1_900+background/weights/best.pt --cfg models/yolov5mCBAMC3_1.yaml --data data/tomato.yaml --epoch 50 --batch-size 16 --workers 2 --single-cls
+Q_Tomato_5mCBAMC3_hypDe_noMulti-scale_1_900+background
+
+
+python detect.py --weights runs/train/5mCBAM_w5m_hypDe_Multi_1_900+background.pt  --source D:\StuData\tomato\采集20221220\小车手机\ --imgsz 1200 --hide-labels --conf-thres 0.4
+
+python detect.py --weights runs/train/5m_w5m_hypDe_Multi_2_900+background.pt --name 5m_resize  --source D:\StuData\tomato\kaggle\RipedandUnripedtomatoDataset\new\images --imgsz 1200 --hide-labels --conf-thres 0.4 --save-txt
+
+D:\StuData\tomato\kaggle\RipedandUnripedtomatoDataset\Images
+
+别忘记 read_opt_to_exl
+
+
+python val.py --weights runs\train\5m_w5m_hypDe_Multi_2_900+background\weights\best.pt --data data/tomato.yaml
+
+
+
+5mCBAM_w5m_hypDe_Multi_1_900+background
+
+集成测试
+python detect.py --weights runs\train\Q_Tomato_w-5m_hypDe_Multi-scale_1_900+background\weights\best.pt weights/yolov5m.pt  --source D:\StuData\tomato\采集20221220\小车手机\ --imgsz 1200 --hide-labels --conf-thres 0.4
+
+

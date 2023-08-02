@@ -1,4 +1,11 @@
+# 该文件用于生成背景数据集的空标签label-文件txt, 输入必须是一个./dataset的目录, 目录下有一个images文件夹或images和labels文件夹, 如果该条件满足, 则可以生成空txt标签文件.
 import os
+
+def get_parent_folder_name(directory):
+    parent_folder = os.path.dirname(directory)
+    parent_folder_name = os.path.basename(parent_folder)
+    return parent_folder_name
+
 
 def background_txt_crate(data_path):
     # 生成背景数据集的txt空标签文件
@@ -19,8 +26,10 @@ def background_txt_crate(data_path):
     # print(total_img)
     list_index = range(num)
 
+    folder_name= get_parent_folder_name(data_path)
+
     for i in list_index:
-        renamed = 'background_bitter_gourd_' + str(i) + '.'
+        renamed = f'background_{folder_name}_' + str(i) + '.'
         label_name =  renamed + 'txt'
 
         img_name = renamed + total_img[i].split('.')[-1]
@@ -37,5 +46,5 @@ def background_txt_crate(data_path):
 
 
 if __name__ == '__main__':
-    main_path = r'D:\StuData\tomato\kaggle\sum\bitter_gourd'
+    main_path = r'D:\StuData\tomato\dataset_factory\background\coco128\images'
     background_txt_crate(main_path)
