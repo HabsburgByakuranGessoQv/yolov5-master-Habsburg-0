@@ -68,7 +68,11 @@ class Detect(nn.Module):
         for i in range(self.nl):
             # 对于每个检测层，先通过卷积层 self.m[i] 处理对应的特征图 x[i]
             x[i] = self.m[i](x[i])  # conv
+            # 将 x[i] 的形状从 (bs,255,20,20) 转换为 (bs,3,20,20,85)，其中 bs 是 batch size，255 是特定的通道数，20 是特定的高度和宽度，85 是特定的预测目标数量和属性数
             bs, _, ny, nx = x[i].shape  # x(bs,255,20,20) to x(bs,3,20,20,85)
+            # 使用 view 函数将 x[i] 进行形状变换，变换为 (bs, self.na, self.no, ny, nx)，其中 self.na 是 anchor boxes 的数量，self.no 是预测的目标属性数量，ny 和 nx 是特定的高度和宽度。
+            # 使用 permute 函数对维度进行重排列，变换为 (bs, 1, ny, nx, self.no)，其中第二个维度 1 对应于 anchor boxes 的数量 self.na
+            # 使用 contiguous 函数使数据在内存中连续存储，以便进行后续计算
             x[i] = x[i].view(bs, self.na, self.no, ny, nx).permute(0, 1, 3, 4, 2).contiguous()
             # 将处理后的特征图 x[i] 转换为预测框的形式，然后将其存储到 z 列表中。如果是 Segment 类型（即含有掩码信息），则对预测框和掩码进行处理；否则只处理预测框
             if not self.training:  # inference 推理模式
@@ -362,10 +366,11 @@ def parse_model(d, ch):  # model_dict, input_channels(3)    该函数接受一�
     # 函数首先从配置字典中提取 anchors（锚框）、nc（类别数）、gd（深度缩放因子）、gw（宽度缩放因子）和激活函数类型。
     anchors, nc, gd, gw, act = d['anchors'], d['nc'], d['depth_multiple'], d['width_multiple'], d.get('activation')
     if act:
+        # 如果配置文件指定了激活函数，会根据配置文件的函数去加载, 比如： Conv.default_act = nn.SiLU()
         Conv.default_act = eval(act)  # redefine default activation, i.e. Conv.default_act = nn.SiLU()
         LOGGER.info(f"{colorstr('activation:')} {act}")  # print
     na = (len(anchors[0]) // 2) if isinstance(anchors, list) else anchors  # number of anchors
-    no = na * (nc + 5)  # number of outputs = anchors * (classes + 5)
+    no = na * (nc + 5)  # number of outputs = anchors * (classes + 5) 输出通道数量 = anchors * (classes + 5)
 
     layers, save, c2 = [], [], ch[-1]  # layers, savelist, ch out
     # 接下来，函数遍历模型的 backbone（骨干网络）和 head（头部网络）配置，逐个解析并构建模型的层
@@ -381,14 +386,14 @@ def parse_model(d, ch):  # model_dict, input_channels(3)    该函数接受一�
         if m in {
                 Conv, GhostConv, Bottleneck, GhostBottleneck, SPP, SPPF, DWConv, MixConv2d, Focus, CrossConv,
                 BottleneckCSP, C3, C3TR, C3SPP, C3Ghost, nn.ConvTranspose2d, DWConvTranspose2d, C3x,
-                CBAMC3, Conv_CBAM}: # Addition: CBAMC3, Conv_CBAM
+                CBAMC3, Conv_CBAM, SE, ECA, CoordAtt, NAMC3}: # Addition: CBAMC3, Conv_CBAM, CA, ECA, SE, CoordAtt
             c1, c2 = ch[f], args[0]
             if c2 != no:  # if not output
                 c2 = make_divisible(c2 * gw, 8)
 
             args = [c1, c2, *args[1:]]
             if m in {BottleneckCSP, C3, C3TR, C3Ghost, C3x,
-                     CBAMC3}: # Addition: CBAMC3
+                     CBAMC3, NAMC3}: # Addition: CBAMC3 NAMC3
                 args.insert(2, n)  # number of repeats
                 n = 1
         elif m is nn.BatchNorm2d:
@@ -406,6 +411,10 @@ def parse_model(d, ch):  # model_dict, input_channels(3)    该函数接受一�
             c2 = ch[f] * args[0] ** 2
         elif m is Expand:
             c2 = ch[f] // args[0] ** 2
+        # NAMAttention
+        elif m in [NAMAttention]:  # channels  # CrissCrossAttention bug,
+            c1 = ch[f]
+            args = [c1]
         else:
             c2 = ch[f]
 
@@ -428,9 +437,19 @@ if __name__ == '__main__':
     # YOLOv5m summary: 212 layers, 21172173 parameters, 21172173 gradients, 48.9 GFLOPs
     # YOLOv5s summary: 157 layers, 7225885 parameters, 7225885 gradients, 16.4 GFLOPs
     parser = argparse.ArgumentParser()
-    parser.add_argument('--cfg', type=str, default='yolov5s.yaml', help='model.yaml')
+    parser.add_argument('--cfg', type=str,
+                        default=
+                        # 'yolov5s.yaml'
+                        # 'yolov5m.yaml'
+                        # 'yolov5m_NAMAttention_1.yaml'
+                        # 'yolov5m_NAMC3_1.yaml'
+                        'yolov5m_CBAMC3-NAMA.yaml'
+                        # 'yolov5m_CBAMC3+NAMC3.yaml'
+                        # 'yolov5mCBAMC3_1.yaml'
+                        ,
+                        help='model.yaml')
     parser.add_argument('--batch-size', type=int, default=1, help='total batch size for all GPUs')
-    parser.add_argument('--device', default='0', help='cuda device, i.e. 0 or 0,1,2,3 or cpu')
+    parser.add_argument('--device', default='cpu', help='cuda device, i.e. 0 or 0,1,2,3 or cpu')
     parser.add_argument('--profile', action='store_true', help='profile model speed')
     parser.add_argument('--line-profile', action='store_true', help='profile model speed layer by layer')
     parser.add_argument('--test', action='store_true', help='test all yolo*.yaml')

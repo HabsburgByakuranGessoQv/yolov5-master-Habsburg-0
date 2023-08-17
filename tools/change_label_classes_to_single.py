@@ -1,7 +1,7 @@
 # 该文件是用于将一个数据集中多种类标签改成单种类的标签, 即0.
 import os
 
-label_path = r'D:\StuData\tomato\kaggle\Riped and Unriped tomato Dataset\labels'
+label_path = r'E:\STUDYCONTENT\Pycharm\yolov5-master\runs\detect\labels'
 # label_path = r'D:\StuData\tomato\kaggle\Riped and Unriped tomato Dataset\labels'
 txt_list = os.listdir(label_path)
 print(txt_list)

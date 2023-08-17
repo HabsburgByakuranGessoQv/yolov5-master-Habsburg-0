@@ -418,6 +418,8 @@ def train(hyp, opt, device, callbacks):  # hyp is path/to/hyp.yaml or hyp dictio
                     loss *= 4.
 
             # Backward
+            # 如果为 True，则使潜在的非确定性操作切换到确定性算法或引发运行时错误。如果为 False，则允许非确定性操作
+            # 此标志不会检测或防止由于在具有内部内存重叠的张量上调用就地操作或通过将此类张量作为操作的 out 参数而引起的非确定性行为。在这些情况下，不同数据的多次写入可能针对单个内存位置，并且无法保证写入的顺序。
             torch.use_deterministic_algorithms(False) # CBAM
             # 梯度缩放后进行反向传播
             scaler.scale(loss).backward()
@@ -571,7 +573,7 @@ def parse_opt(known=False):
     parser.add_argument('--single-cls', action='store_true', help='train multi-class data as single-class')
     parser.add_argument('--optimizer', type=str, choices=['SGD', 'Adam', 'AdamW'], default='SGD', help='optimizer')
     parser.add_argument('--sync-bn', action='store_true', help='use SyncBatchNorm, only available in DDP mode')
-    parser.add_argument('--workers', type=int, default=4, help='max dataloader workers (per RANK in DDP mode)')
+    parser.add_argument('--workers', type=int, default=2, help='max dataloader workers (per RANK in DDP mode)')
     parser.add_argument('--project', default=ROOT / 'runs/train', help='save to project/name')
     parser.add_argument('--name', default='exp', help='save to project/name')
     parser.add_argument('--exist-ok', action='store_true', help='existing project/name ok, do not increment')

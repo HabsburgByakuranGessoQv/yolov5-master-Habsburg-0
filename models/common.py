@@ -1023,3 +1023,157 @@ class Conv_CBAM(nn.Module):
 
 # end --------------------------CBAMC3 Model------------------------------
 # end --------------------------Conv_CBAM Model---------------------------
+
+# start--------------------------  SE   Model------------------------------
+'''
+SEnet (Squeeze-and-Excitation Network) 考虑了特征通道之间的关系，在特征通道上加入了注意力机制。
+SEnet 通过学习的方式自动获取每个特征通道的重要程度，并且利用得到的重要程度来提升特征并抑制对当前任务不重要的特征SEnet 通过 Squeeze 模块和 Exciation 模块实现所述功能。
+'''
+class SE(nn.Module):
+	def __init__(self, c1, c2, r=16):
+		super(SE, self).__init__()
+		self.avgpool = nn.AdaptiveAvgPool2d(1)
+		self.l1 = nn.Linear(c1, c1 // r, bias=False)
+		self.relu = nn.ReLU(inplace=True)
+		self.l2 = nn.Linear(c1 // r, c1, bias=False)
+		self.sig = nn.Sigmoid()
+	def forward(self, x):
+		print(x.size())
+		b, c, _, _ = x.size()
+		y = self.avgpool(x).view(b, c)
+		y = self.l1(y)
+		y = self.relu(y)
+		y = self.l2(y)
+		y = self.sig(y)
+		y = y.view(b, c, 1, 1)
+		return x * y.expand_as(x)
+
+
+# end--------------------------  SE   Model------------------------------
+
+# start ----------------------- ECA   Model------------------------------
+'''
+先前的方法大多致力于开发更复杂的注意力模块，以实现更好的性能，这不可避免地增加了模型的复杂性。
+为了克服性能和复杂性之间的矛盾，作者提出了一种有效的通道关注(ECA ) 模块，该模块只增加了少量的参数，却能获得明显的性能增益
+'''
+
+class ECA(nn.Module):
+	"""Constructs a ECA module.
+	Args:
+		channel: Number of channels of the input feature map
+		k_size: Adaptive selection of kernel size
+	"""
+
+	def __init__(self, c1,c2, k_size=3):
+		super(ECA, self).__init__()
+		self.avg_pool = nn.AdaptiveAvgPool2d(1)
+		self.conv = nn.Conv1d(1, 1, kernel_size=k_size, padding=(k_size - 1) // 2, bias=False)
+		self.sigmoid = nn.Sigmoid()
+
+	def forward(self, x):
+		# feature descriptor on the global spatial information
+		y = self.avg_pool(x)
+		y = self.conv(y.squeeze(-1).transpose(-1, -2)).transpose(-1, -2).unsqueeze(-1)
+		# Multi-scale information fusion
+		y = self.sigmoid(y)
+
+		return x * y.expand_as(x)
+
+
+# end-------------------------- ECA   Model------------------------------
+
+# start -----------------------  CA   Model------------------------------
+# CA
+class h_sigmoid(nn.Module):
+	def __init__(self, inplace=True):
+		super(h_sigmoid, self).__init__()
+		self.relu = nn.ReLU6(inplace=inplace)
+	def forward(self, x):
+		return self.relu(x + 3) / 6
+class h_swish(nn.Module):
+	def __init__(self, inplace=True):
+		super(h_swish, self).__init__()
+		self.sigmoid = h_sigmoid(inplace=inplace)
+	def forward(self, x):
+		return x * self.sigmoid(x)
+
+class CoordAtt(nn.Module):
+	def __init__(self, inp, oup, reduction=32):
+		super(CoordAtt, self).__init__()
+		self.pool_h = nn.AdaptiveAvgPool2d((None, 1))
+		self.pool_w = nn.AdaptiveAvgPool2d((1, None))
+		mip = max(8, inp // reduction)
+		self.conv1 = nn.Conv2d(inp, mip, kernel_size=1, stride=1, padding=0)
+		self.bn1 = nn.BatchNorm2d(mip)
+		self.act = h_swish()
+		self.conv_h = nn.Conv2d(mip, oup, kernel_size=1, stride=1, padding=0)
+		self.conv_w = nn.Conv2d(mip, oup, kernel_size=1, stride=1, padding=0)
+	def forward(self, x):
+		identity = x
+		n, c, h, w = x.size()
+		#c*1*W
+		x_h = self.pool_h(x)
+		#c*H*1
+		#C*1*h
+		x_w = self.pool_w(x).permute(0, 1, 3, 2)
+		y = torch.cat([x_h, x_w], dim=2)
+		#C*1*(h+w)
+		y = self.conv1(y)
+		y = self.bn1(y)
+		y = self.act(y)
+		x_h, x_w = torch.split(y, [h, w], dim=2)
+		x_w = x_w.permute(0, 1, 3, 2)
+		a_h = self.conv_h(x_h).sigmoid()
+		a_w = self.conv_w(x_w).sigmoid()
+		out = identity * a_w * a_h
+		return out
+
+# end--------------------------  CA   Model------------------------------
+# start -----------------------  NAMAttention Model ---------------------
+
+class Channel_Att(nn.Module):
+	def __init__(self, channels):
+		super(Channel_Att, self).__init__()
+		self.channels = channels
+
+		self.bn2 = nn.BatchNorm2d(self.channels, affine=True)
+
+	def forward(self, x):
+		residual = x
+
+		x = self.bn2(x)
+		weight_bn = self.bn2.weight.data.abs() / torch.sum(self.bn2.weight.data.abs())
+		x = x.permute(0, 2, 3, 1).contiguous()
+		x = torch.mul(weight_bn, x)
+		x = x.permute(0, 3, 1, 2).contiguous()
+
+		x = torch.sigmoid(x) * residual  #
+
+		return x
+
+
+class NAMAttention(nn.Module):
+	def __init__(self, channels):
+		super(NAMAttention, self).__init__()
+		self.Channel_Att = Channel_Att(channels)
+
+	def forward(self, x):
+		x_out1 = self.Channel_Att(x)
+
+		return x_out1
+
+class NAMC3(nn.Module):
+	def __init__(self, c1, c2, n=1, shortcut=True, g=1, e=0.5):
+		super(NAMC3, self).__init__()
+		c_ = int(c2 * e)  # hidden channels
+		self.cv1 = Conv(c1, c_, 1, 1)
+		self.cv2 = Conv(c1, c_, 1, 1)
+		self.cv3 = Conv(2 * c_, c2, 1)
+		self.m = nn.Sequential(*[Bottleneck(c_, c_, shortcut, g, e=1.0) for _ in range(n)])
+
+		self.Channel_Att = Channel_Att(c2)
+
+	def forward(self, x):
+		return self.Channel_Att(self.cv3(torch.cat((self.m(self.cv1(x)), self.cv2(x)), dim=1)))
+
+# end -------------------------  NAMAttention Model ---------------------

@@ -72,7 +72,7 @@ def mass_folder_crate(datasets_list):
         # print(datasets_list[0])
         mode_write = 'w' if i == datasets_list[0] else 'a'
         i = os.path.join(i, 'images')
-        print(i)
+        # print(i)
         opt = parse_opt()
         opt.img_path = i
         opt.aORw = mode_write
@@ -96,16 +96,9 @@ if __name__ == '__main__':
     opt_main = parse_opt()
     if opt_main.mode == 'file':
         # 该写入方式下目录仅需要到 /images的上一级!
-        datasets_list_main = [r'D:\StuData\tomato\dataset_factory\background\apples',
-                         r'D:\StuData\tomato\dataset_factory\background\bitter_gourd',
-                         r'D:\StuData\tomato\dataset_factory\background\leaf',
-                         r'D:\StuData\tomato\dataset_factory\background\orange',
-                         r'D:\StuData\tomato\dataset_factory\background\coco128',
-                         r'D:\StuData\tomato\dataset_factory\230116cropped',
-                         r'D:\StuData\tomato\dataset_factory\Public_dataset_1',
-                         r'D:\StuData\tomato\dataset_factory\kaggle1',
-                         ]
-        # datasets_list_main = []
+        datasets_list_main = ['D:\\StuData\\tomato\\dataset_factory\\background\\apples', 'D:\\StuData\\tomato\\dataset_factory\\background\\ball', 'D:\\StuData\\tomato\\dataset_factory\\background\\bitter_gourd', 'D:\\StuData\\tomato\\dataset_factory\\background\\coco_0', 'D:\\StuData\\tomato\\dataset_factory\\background\\coco_1', 'D:\\StuData\\tomato\\dataset_factory\\background\\coco_2', 'D:\\StuData\\tomato\\dataset_factory\\background\\coco_3', 'D:\\StuData\\tomato\\dataset_factory\\background\\dirt', 'D:\\StuData\\tomato\\dataset_factory\\background\\fruit360', 'D:\\StuData\\tomato\\dataset_factory\\background\\grass', 'D:\\StuData\\tomato\\dataset_factory\\background\\leaf', 'D:\\StuData\\tomato\\dataset_factory\\background\\orange', 'D:\\StuData\\tomato\\dataset_factory\\tomato\\230116cropped', 'D:\\StuData\\tomato\\dataset_factory\\tomato\\dark_resize', 'D:\\StuData\\tomato\\dataset_factory\\tomato\\kaggle1', 'D:\\StuData\\tomato\\dataset_factory\\tomato\\light_good_pad', 'D:\\StuData\\tomato\\dataset_factory\\tomato\\Public_dataset_1', 'D:\\StuData\\tomato\\dataset_factory\\tomato\\Tomato1', 'D:\\StuData\\tomato\\dataset_factory\\tomato\\Tomato2', 'D:\\StuData\\tomato\\dataset_factory\\tomato\\Tomato3', 'D:\\StuData\\tomato\\dataset_factory\\tomato\\Tomato4', 'D:\\StuData\\tomato\\dataset_factory\\tomato\\TomatoCherryRed', 'D:\\StuData\\tomato\\dataset_factory\\tomato\\TomatoHeart', 'D:\\StuData\\tomato\\dataset_factory\\tomato\\TomatoMaroon', 'D:\\StuData\\tomato\\dataset_factory\\tomato\\TomatonotRipened', 'D:\\StuData\\tomato\\dataset_factory\\tomato\\TomatoYellow']
+
+                              # datasets_list_main = []
         mass_folder_crate(datasets_list_main)
         print('-*-'*70, '\n', '该方式为默认文件内设置的多目录写入, 如您是终端运行, 且仅需要单目录写入, 请运行时加入--mode cmd参数!', '\n',
               'This mode is for writing to multiple directories in the default file, if you are running on a terminal and only need to write to a single directory, please add the --mode cmd parameter when running!',

@@ -1,0 +1,9 @@
+path: D:\StuData\numbers\txtpath
+train: train.txt  # train images (relative to 'path') 128 images
+val: val.txt  # val images (relative to 'path') 128 images
+test: test.txt # test images (optional)
+
+# Classes
+nc: 10  # number of classes
+names: [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
+]

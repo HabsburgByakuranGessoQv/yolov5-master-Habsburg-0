@@ -108,10 +108,10 @@ def save_fix(target_width, target_height, folder, save_path):
 
 if __name__ == '__main__':
     # 设置目标宽度和高度
-    target_width_main = 800
-    target_height_main = 600
+    target_width_main = 640
+    target_height_main = 640
 
-    raw_path = r'D:\StuData\tomato\kaggle\RipedandUnripedtomatoDataset'
-    new_path = r'D:\StuData\tomato\kaggle\RipedandUnripedtomatoDataset\new'
+    raw_path = r'D:\StuData\tomato\paddle\dark_big'
+    new_path = r'D:\StuData\tomato\paddle\dark_resize'
 
     save_fix(target_width_main, target_height_main, raw_path, new_path)

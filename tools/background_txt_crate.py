@@ -29,7 +29,7 @@ def background_txt_crate(data_path):
     folder_name= get_parent_folder_name(data_path)
 
     for i in list_index:
-        renamed = f'background_{folder_name}_' + str(i) + '.'
+        renamed = f'background_{os.path.basename(data_path)}_' + str(i) + '.'
         label_name =  renamed + 'txt'
 
         img_name = renamed + total_img[i].split('.')[-1]
@@ -46,5 +46,9 @@ def background_txt_crate(data_path):
 
 
 if __name__ == '__main__':
-    main_path = r'D:\StuData\tomato\dataset_factory\background\coco128\images'
-    background_txt_crate(main_path)
+    # main_path = r'D:\StuData\tomato\dataset_factory\temp\ball_2'
+    # background_txt_crate(main_path)
+
+    main_folder = ['D:\\StuData\\tomato\\dataset_factory\\temp\\ball', 'D:\\StuData\\tomato\\dataset_factory\\temp\\coco_0', 'D:\\StuData\\tomato\\dataset_factory\\temp\\coco_1', 'D:\\StuData\\tomato\\dataset_factory\\temp\\coco_2', 'D:\\StuData\\tomato\\dataset_factory\\temp\\coco_3', 'D:\\StuData\\tomato\\dataset_factory\\temp\\fruit360']
+    for i in main_folder:
+        background_txt_crate(i)

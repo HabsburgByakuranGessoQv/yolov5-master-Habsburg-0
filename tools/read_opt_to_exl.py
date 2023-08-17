@@ -46,7 +46,7 @@ def write_in(keys, values):
 
 if __name__ == '__main__':
     yaml_path_main = \
-        r'E:\STUDYCONTENT\Pycharm\yolov5-master\runs\train\Q_Tomato_w-5m_hypHi_Multi-scale_1_900+background\opt.yaml'
+        r'E:\STUDYCONTENT\Pycharm\yolov5-master\runs\train\5mCBAM_w5m_hypHi_Multi_1_5+8-coco\opt.yaml'
 
     data_yaml = read_yaml_all(yaml_path_main)
     keys_main = ['cfg', 'weights', 'epochs', 'batch_size', 'imgsz', 'multi_scale', 'optimizer', 'workers', 'cos_lr', 'freeze', 'label_smoothing', 'quad']
