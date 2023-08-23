@@ -2,6 +2,7 @@ import os
 import random
 import shutil
 
+
 def extract_images(source_dir, target_dir, num_images=20):
     if not os.path.exists(target_dir):
         os.makedirs(target_dir)
@@ -17,10 +18,11 @@ def extract_images(source_dir, target_dir, num_images=20):
             num_images_to_copy = min(num_images, len(images))
 
             for i in range(num_images_to_copy):
-                final_name = '{0}_{1}'.format(folder_name, i+1)
+                final_name = '{0}_{1}'.format(folder_name, i + 1)
                 source_file = os.path.join(folder_path, images[i])
                 target_file = os.path.join(target_dir, f"{final_name}.jpg")
                 shutil.copyfile(source_file, target_file)
+
 
 def extract_random_images(source_dir, target_dir, num_images=20):
     if not os.path.exists(target_dir):
@@ -41,11 +43,10 @@ def extract_random_images(source_dir, target_dir, num_images=20):
             sampled_images = random.sample(images, num_images_to_copy)
 
             for i, image in enumerate(sampled_images):
-                final_name = '{0}_{1}'.format(folder_name, i+1)
+                final_name = '{0}_{1}'.format(folder_name, i + 1)
                 source_file = os.path.join(folder_path, image)
                 target_file = os.path.join(target_dir, f"{final_name}.jpg")
                 shutil.copyfile(source_file, target_file)
-
 
 
 if __name__ == "__main__":

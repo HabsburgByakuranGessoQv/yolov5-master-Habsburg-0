@@ -1,32 +1,48 @@
 python train.py --data data/tomato.yaml --epoch 10 --batch-size 4 --workers 2 --single-cls --name test  --weights weights/yolov5m.pt --cfg models/yolov5m_CBAMC3-NAMA.yaml
 
-5mCBAM_w5m6_hypHi_Mulit_1_14+12
+python detect.py --weights E:\STUDYCONTENT\Pycharm\yolov5-master\runs\train\5mNAMA_w5m_hypHi_Mulit_1.1_14+12\weights/best.pt  --name 5mNAM_1.100_14+12_car --source D:\StuData\tomato\采集20221220\小车手机\ --imgsz 1200 --hide-labels --conf-thres 0.6 --save-conf
 
+python detect.py --weights E:\STUDYCONTENT\Pycharm\yolov5-master\runs\train\5mNAMA_w5m_hypHi_Mulit_1.1_14+12\weights/best.pt --name 5mNAM_1.100_14+12-coco --source datasets/coco128/images/train2017 --imgsz 1200 --hide-labels --conf-thres 0.6 --save-txt --save-conf --save-crop --nosave
 
-python detect.py --weights runs/train/5mNAMC3_w5m_hypHi_Mulit_1_14+12\weights\best.pt  --name 5mNAMC3_Hi_14+12_car --source D:\StuData\tomato\采集20221220\小车手机\ --imgsz 1200 --hide-labels --conf-thres 0.6 --save-conf
+python detect.py --weights E:\STUDYCONTENT\Pycharm\yolov5-master\runs\train\5mNAMA_w5m_hypHi_Mulit_1.1_14+12\weights/best.pt --name 5mNAM_1.100_14+12-coco2 --source D:\StuData\tomato\dataset_factory\background\coco_2\images --imgsz 1200 --hide-labels --conf-thres 0.6 --save-txt --save-conf --save-crop --nosave
 
-python detect.py --weights runs/train/5mNAMC3_w5m_hypHi_Mulit_1_14+12\weights\best.pt --name 5mNAMC3_Hi_14+12-coco --source datasets/coco128/images/train2017 --imgsz 1200 --hide-labels --conf-thres 0.6 --save-txt --save-conf --save-crop --nosave
+python detect.py --weights E:\STUDYCONTENT\Pycharm\yolov5-master\runs\train\5mNAMC3_1\weights/best.pt --name 5mNAMC3_1_shinei  --source D:\StuData\tomato\番茄视频\shinei\ --imgsz 1200 --hide-labels --conf-thres 0.6 --save-txt --save-conf
 
-python detect.py --weights runs/train/5mNAMC3_w5m_hypHi_Mulit_1_14+12\weights\best.pt --name 5mNAMC3_Hi_14+12-coco2 --source D:\StuData\tomato\dataset_factory\background\coco_2\images --imgsz 1200 --hide-labels --conf-thres 0.6 --save-txt --save-conf --save-crop --nosave
-
-python detect.py --weights runs/train/5mNAMC3_w5m_hypHi_Mulit_1_14+12\weights\best.pt --name 5mNAMC3_Hi_14+12_shinei  --source D:\StuData\tomato\番茄视频\shinei\ --imgsz 1200 --hide-labels --conf-thres 0.6 --save-txt --save-conf
-
-python detect.py --weights runs/train/5mNAMC3_w5m_hypHi_Mulit_1_14+12\weights\best.pt --name 5mNAMC3_Hi_14+12_fruits360  --source D:\StuData\tomato\kaggle\fruits-360\fruits-360_dataset\fruits-360\test-multiple_fruits --imgsz 1200 --hide-labels --conf-thres 0.6 --save-txt
-
-VID_20230804_170321.mp4
-
-5mCBAM_De_5+8-coco
+python detect.py --weights E:\STUDYCONTENT\Pycharm\yolov5-master\runs\train\5mNAMA_w5m_hypHi_Mulit_1.1_14+12\weights/best.pt --name 5mNAM_1.100_14+12_fruits360  --source D:\StuData\tomato\kaggle\fruits-360\fruits-360_dataset\fruits-360\test-multiple_fruits --imgsz 1200 --hide-labels --conf-thres 0.6 --save-txt
 
 别忘记 read_opt_to_exl
 
+python val.py --weights E:\STUDYCONTENT\Pycharm\yolov5-master\runs\train\5mNAMA_w5m_hypHi_Mulit_1.1_14+12\weights/best.pt --data data/tomato.yaml --name 5mNAM_1.100
 
-python val.py --weights runs\train\5mCBAM_w5m6_hypHi_Mulit_1_14+12\weights\best.pt --data data/tomato.yaml --name m6_CBAM_14+12
-
-
-5mCBAM_w5m_hypHi_Multi_1_14+9
 5mNAMA_w5m_hypHi_Mulit_1_14+12
 
 集成测试
 python detect.py --weights runs\train\5mCBAM_w5m_hypHi_Multi_1_14+9\weights\best.pt weights/yolov5m.pt  --source D:\StuData\tomato\采集20221220\小车手机\ --imgsz 1200 --hide-labels --conf-thres 0.4
 
 
+python export.py --weights runs/train/5mNAMC3_1/weights/best.pt --include onnx  --half --device 0
+
+python export.py --weights runs/train/5mNAMC3_1/weights/best.pt --include openvino --data data/tomato.yaml --int8
+
+
+python benchmarks.py --weights runs/train/5mNAMC3_w5m_hypHi_Mulit_1_14+12/weights/best.pt --img 640 --data data/tomato.yaml
+
+
+
+python detect.py --weights runs/train/5mNAMC3_w5m_hypHi_Mulit_1_14+12/weights/best_fp16.onnx --name fp16  --source D:\StuData\tomato\kaggle\fruits-360\fruits-360_dataset\fruits-360\test-multiple_fruits --imgsz 1200 --hide-labels --conf-thres 0.6 --save-txt
+
+python detect.py --weights runs/train/5mNAMC3_w5m_hypHi_Mulit_1_14+12/weights/best.pt --name fp16  --source D:\StuData\tomato\kaggle\fruits-360\fruits-360_dataset\fruits-360\test-multiple_fruits --imgsz 1200 --hide-labels --conf-thres 0.6 --save-txt --half
+
+python detect.py --weights runs/train/5mNAMC3_w5m_hypHi_Mulit_1_14+12/weights/best.pt --name fp32  --source D:\StuData\tomato\kaggle\fruits-360\fruits-360_dataset\fruits-360\test-multiple_fruits --imgsz 1200 --hide-labels --conf-thres 0.6 --save-txt
+
+
+python detect.py --weights runs\train\5mNAMC3\weights\best_openvino_model_int8\ --name int8_fruit --source D:\StuData\tomato\kaggle\fruits-360\fruits-360_dataset\fruits-360\test-multiple_fruits --imgsz 640 --hide-labels --conf-thres 0.7 --save-txt
+
+python detect.py --weights runs\train\5mNAMC3\weights\best_openvino_model\ --name fp32_fruit  --source D:\StuData\tomato\kaggle\fruits-360\fruits-360_dataset\fruits-360\test-multiple_fruits --imgsz 640 --hide-labels --conf-thres 0.7 --save-txt
+
+python val.py --weights runs\train\5mNAMC3\weights\best_openvino_model\ --name fp32 --data data/tomato.yaml
+
+python val.py --weights runs\train\5mNAMC3\weights\best_openvino_model_int8\ --name int8 --data data/tomato.yaml
+
+
+D:\StuData\tomato\dataset_factory\background\coco_2\images
