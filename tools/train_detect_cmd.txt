@@ -10,7 +10,7 @@ python detect.py --weights runs/train/CBAMC3_1/weights/best.pt --name 5mCBAMC3-c
 
 python detect.py --weights runs/train/CBAMC3_1/weights/best.pt --name 5mCBAMC3_shinei  --source D:\StuData\tomato\番茄视频\shinei\ --imgsz 1200 --hide-labels --conf-thres 0.6 --save-txt --save-conf
 
-python detect.py --weights runs/train/CBAMC3_1/weights/best.pt--name 5mCBAMC3_fruits360  --source D:\StuData\tomato\kaggle\fruits-360\fruits-360_dataset\fruits-360\test-multiple_fruits --imgsz 1200 --hide-labels --conf-thres 0.6 --save-txt
+python detect.py --weights runs/train/CBAMC3_1/weights/best.pt --name 5mCBAMC3_fruits360  --source D:\StuData\tomato\kaggle\fruits-360\fruits-360_dataset\fruits-360\test-multiple_fruits --imgsz 1200 --hide-labels --conf-thres 0.6 --save-txt
 
 别忘记 read_opt_to_exl
 
