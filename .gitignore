@@ -256,3 +256,5 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
+/backup/Arial.Unicode.ttf
+/backup/Miniconda3-py310_23.5.2-0-Linux-x86_64.sh
