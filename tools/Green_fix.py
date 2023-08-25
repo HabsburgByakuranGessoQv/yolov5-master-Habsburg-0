@@ -1,3 +1,4 @@
+# 该文件是一个将图片的rgb 3个通道的均值调整到一个固定值的程序.
 import cv2
 import numpy as np
 
@@ -18,29 +19,27 @@ def shift_channels(image, r_shift, g_shift, b_shift):
 
 
 # 读取图像
-image = cv2.imread(r'D:\StuData\pest\5055_638120089624152649_FTP.jpg')
+image_main = cv2.imread(r'D:\StuData\pest\5055_638120089624152649_FTP.jpg')
 
 # 计算图像每个通道的平均值
-b_mean = np.mean(image[:, :, 0])
-g_mean = np.mean(image[:, :, 1])
-r_mean = np.mean(image[:, :, 2])
+b_mean_main = np.mean(image_main[:, :, 0])
+g_mean_main = np.mean(image_main[:, :, 1])
+r_mean_main = np.mean(image_main[:, :, 2])
 
 # 计算每个通道的平移量
-b_shift = int(128 - b_mean)
-g_shift = int(128 - g_mean)
-r_shift = int(128 - r_mean)
+b_shift_main = int(128 - b_mean_main)
+g_shift_main = int(128 - g_mean_main)
+r_shift_main = int(128 - r_mean_main)
 
-print(b_mean, g_mean, r_mean)
+print(b_mean_main, g_mean_main, r_mean_main)
 
 # 调用平移通道函数
-balanced_image = shift_channels(image, r_shift, g_shift, b_shift)
+balanced_image = shift_channels(image_main, r_shift_main, g_shift_main, b_shift_main)
 
 
 # 显示结果图像
-cv2.imshow('Original Image', image)
+cv2.imshow('Original Image', image_main)
 cv2.imshow('Balanced Image', balanced_image)
 cv2.imwrite('balanced.jpg', balanced_image)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
-
-

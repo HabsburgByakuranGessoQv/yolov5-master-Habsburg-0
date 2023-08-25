@@ -21,6 +21,7 @@ from torch.utils.data.dataset import Dataset
 
 from torchvision.transforms import transforms
 
+
 # raw
 # with open("F:\datas\新刷子误判数据\第3次清洗\data.json", 'r') as f:
 #     temp = json.loads(f.read())
@@ -309,9 +310,9 @@ class Crop():
                     # 转换为x1y1x2y2
                     object_list[:, 1], object_list[:, 2], object_list[:, 3], object_list[:, 4] = \
                         ((object_list[:, 1] - object_list[:, 3] / 2) * Width).astype(int), \
-                        ((object_list[:, 2] - object_list[:, 4] / 2) * Height).astype(int), \
-                        ((object_list[:, 1] + object_list[:, 3] / 2) * Width).astype(int), \
-                        ((object_list[:, 2] + object_list[:, 4] / 2) * Height).astype(int)
+                            ((object_list[:, 2] - object_list[:, 4] / 2) * Height).astype(int), \
+                            ((object_list[:, 1] + object_list[:, 3] / 2) * Width).astype(int), \
+                            ((object_list[:, 2] + object_list[:, 4] / 2) * Height).astype(int)
 
             except:
                 # 若读取报错（表示文件为空），则指定列表为空。
@@ -672,6 +673,7 @@ class randomCenterCrop(Crop):
                              toYolo(box, sub_image.shape[2], sub_image.shape[1]) if coordinates == 'yolo' else box)
         return n_save_imgs
 
+
 # 随机切
 def randomCenter(img_path, label_path, save_img, save_label, size):
     ########################################标签随机切####################################################
@@ -692,14 +694,14 @@ def slidingWindow(img_path, label_path, save_img, save_label, size):
     sw = slidingWindowCrop(windowSize=size)  # 通过指定窗口宽高进行初始化
 
     # 对滑动窗口对象传送数据
-    sw.inputImage(img_path) # 传入图像路径
-    sw.inputLabel(label_path, coordinates='yolo') # 传入标签路径
+    sw.inputImage(img_path)  # 传入图像路径
+    sw.inputLabel(label_path, coordinates='yolo')  # 传入标签路径
     # sw.showImage(1, figsize=(12, 10))
     # sw.showSliceImage(1, overlap=0.5, new_box_iou_limit=0.35)
 
     # 切分并保存数据集中所有图片，子图保存到‘im'，子图标签保存到’la‘
     for i in range(len(sw.dataSet)):
-        sw.saveSubImageAndTxt(i, save_img, save_label, # i, 保存图像路径, 保存标签路径
+        sw.saveSubImageAndTxt(i, save_img, save_label,  # i, 保存图像路径, 保存标签路径
                               overlap=0,  # 滑窗堆叠率
                               new_box_iou_limit=0.4,  # 标签iou舍弃，切出来iou大于该参数保留
                               save_all=True,
@@ -711,6 +713,7 @@ def slidingWindow(img_path, label_path, save_img, save_label, size):
 def del_sliding_rep(img_path, label_path):
     # 如果 ?_?_1.jpg 与 ?_?_0.jpg 十分接近， 可利用此函数删除_1的批次图片以及标签 (?_0_? ~= ?_1_?)
     return 0
+
 
 if __name__ == '__main__':
     img_path_main = r'D:\StuData\numbers\images'

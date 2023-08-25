@@ -1,6 +1,7 @@
 # 该文件用于生成背景数据集的空标签label-文件txt, 输入必须是一个./dataset的目录, 目录下有一个images文件夹或images和labels文件夹, 如果该条件满足, 则可以生成空txt标签文件.
 import os
 
+
 def get_parent_folder_name(directory):
     parent_folder = os.path.dirname(directory)
     parent_folder_name = os.path.basename(parent_folder)
@@ -17,8 +18,10 @@ def background_txt_crate(data_path):
         os.mkdir(os.path.join(data_path, 'labels'))
         data_list = os.listdir(data_path)
 
-    images_path = os.path.join(data_path, data_list[0]) if data_list[0] == 'images' else os.path.join(data_path, data_list[1])
-    labels_path = os.path.join(data_path, data_list[1]) if data_list[1] == 'labels' else os.path.join(data_path, data_list[0])
+    images_path = os.path.join(data_path, data_list[0]) if data_list[0] == 'images' else os.path.join(data_path,
+                                                                                                      data_list[1])
+    labels_path = os.path.join(data_path, data_list[1]) if data_list[1] == 'labels' else os.path.join(data_path,
+                                                                                                      data_list[0])
     # print(images_path, labels_path)
 
     total_img = os.listdir(images_path)
@@ -26,11 +29,11 @@ def background_txt_crate(data_path):
     # print(total_img)
     list_index = range(num)
 
-    folder_name= get_parent_folder_name(data_path)
+    folder_name = get_parent_folder_name(data_path)
 
     for i in list_index:
         renamed = f'background_{os.path.basename(data_path)}_' + str(i) + '.'
-        label_name =  renamed + 'txt'
+        label_name = renamed + 'txt'
 
         img_name = renamed + total_img[i].split('.')[-1]
         img_old_path = os.path.join(images_path, total_img[i])
@@ -49,6 +52,11 @@ if __name__ == '__main__':
     # main_path = r'D:\StuData\tomato\dataset_factory\temp\ball_2'
     # background_txt_crate(main_path)
 
-    main_folder = ['D:\\StuData\\tomato\\dataset_factory\\temp\\ball', 'D:\\StuData\\tomato\\dataset_factory\\temp\\coco_0', 'D:\\StuData\\tomato\\dataset_factory\\temp\\coco_1', 'D:\\StuData\\tomato\\dataset_factory\\temp\\coco_2', 'D:\\StuData\\tomato\\dataset_factory\\temp\\coco_3', 'D:\\StuData\\tomato\\dataset_factory\\temp\\fruit360']
+    main_folder = ['D:\\StuData\\tomato\\dataset_factory\\temp\\ball',
+                   'D:\\StuData\\tomato\\dataset_factory\\temp\\coco_0',
+                   'D:\\StuData\\tomato\\dataset_factory\\temp\\coco_1',
+                   'D:\\StuData\\tomato\\dataset_factory\\temp\\coco_2',
+                   'D:\\StuData\\tomato\\dataset_factory\\temp\\coco_3',
+                   'D:\\StuData\\tomato\\dataset_factory\\temp\\fruit360']
     for i in main_folder:
         background_txt_crate(i)

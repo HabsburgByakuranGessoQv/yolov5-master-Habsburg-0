@@ -1,4 +1,6 @@
+# 该文件是一个读取文件夹下所有文件夹绝对路径的程序。 用于制作数据集的txt文件中数据的写入, 配合 split_data.py 使.。
 import os
+
 exam_path = r'D:\StuData\tomato\dataset_factory\tomato'
 back_path = r'D:\StuData\tomato\dataset_factory\background'
 

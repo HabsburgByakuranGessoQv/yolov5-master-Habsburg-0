@@ -1,6 +1,8 @@
+# 该文件是用于将一个文件夹的图片根据设置的大小滑窗切割下来并且保存, 可以设置步长, 可以用于切割大图片, 制作数据集.
 import os
 
 from PIL import Image
+
 
 def sliding_window(image_path, img_name, window_size=(640, 640), stride=(640, 640), save_path='output'):
     # 打开原始大图片
@@ -24,13 +26,15 @@ def sliding_window(image_path, img_name, window_size=(640, 640), stride=(640, 64
             # 保存切割后的小图片
             window.save(os.path.join(save_path, f"{img_name.split('.')[0]}_window_{x}_{y}.png"))
 
+
 if __name__ == "__main__":
-    image_path = r"D:\StuData\tomato\background_new"  # 替换为你的大图片路径
-    img_list = os.listdir(image_path)
+    image_path_main = r"D:\StuData\tomato\background_new"  # 替换为你的大图片路径
+    img_list = os.listdir(image_path_main)
     img_num = len(img_list)
     for i in range(img_num):
         if img_list[i] == 'slide':
             continue
-        img_i = os.path.join(image_path, img_list[i])
+        img_i = os.path.join(image_path_main, img_list[i])
         print(img_i)
-        sliding_window(img_i, window_size=(640, 640), stride=(120, 120), save_path=r'D:\StuData\tomato\background_new\slide', img_name=img_list[i])
+        sliding_window(img_i, window_size=(640, 640), stride=(120, 120),
+                       save_path=r'D:\StuData\tomato\background_new\slide', img_name=img_list[i])

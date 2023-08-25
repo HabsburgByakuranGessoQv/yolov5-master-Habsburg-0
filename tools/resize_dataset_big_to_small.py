@@ -2,6 +2,7 @@
 import os
 import cv2
 
+
 def resize_image(image, target_width, target_height):
     # 获取原始图像的宽度和高度
     original_height, original_width = image.shape[:2]
@@ -18,12 +19,10 @@ def resize_image(image, target_width, target_height):
         print("{0}是大像素图片, 已修改为({1}, {2}, 3)".format(image.shape, target_width, target_height), end='\n')
         resized_image = cv2.resize(image, (target_width, target_height), interpolation=cv2.INTER_AREA)
 
-
     else:
         # 对于小像素图片，保持原始大小
         print("{0}不是大像素图片".format(image.shape), end='\n')
         resized_image = image
-
 
     return resized_image, scale_x, scale_y
 
@@ -99,11 +98,11 @@ def save_fix(target_width, target_height, folder, save_path):
 
         # 调整YOLO标签
         # if os.path.exists(label_path):
-        adjust_yolo_label(label_path, save_label_path,  scale_x, scale_y)
+        adjust_yolo_label(label_path, save_label_path, scale_x, scale_y)
         print(save_label_path)
 
         print('save done! {0}'.format(save_name))
-        print('*'*100)
+        print('*' * 100)
 
 
 if __name__ == '__main__':

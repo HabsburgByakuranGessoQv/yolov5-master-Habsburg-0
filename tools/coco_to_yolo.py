@@ -1,6 +1,8 @@
+# 该文件是一个把coco数据集中标签的数据转化为yolo标签格式的程序.
 import json
 import os
 from pathlib import Path
+
 
 def coco_to_yolo(coco_file, output_dir):
     with open(coco_file) as f:
@@ -34,6 +36,7 @@ def coco_to_yolo(coco_file, output_dir):
         # os.makedirs(Path(output_dir) / 'labels', exist_ok=True)
         # os.system(f"cp {image_name} {Path(output_dir) / 'images'}")
 
+
 def extract_classes(coco_file, output_dir):
     output_dir = os.path.join(output_dir, 'labels')
     if not os.path.exists(output_dir):
@@ -47,6 +50,7 @@ def extract_classes(coco_file, output_dir):
 
     with open(Path(output_dir) / 'classes.txt', 'w') as classes_file:
         classes_file.write('\n'.join(class_names))
+
 
 if __name__ == "__main__":
     coco_file_path = r'D:\StuData\tomato\paddle\tomatoOD\tomatOD_annotations\tomatOD_train.json'  # 修改为你的COCO标注文件的路径

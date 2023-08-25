@@ -1,5 +1,7 @@
 python train.py --data data/tomato.yaml --epoch 10 --batch-size 4 --workers 2 --single-cls --name test  --weights weights/yolov5m.pt --cfg models/yolov5m_CBAMC3-NAMA.yaml
 
+------ 测试模型 -----
+
 python detect.py --weights E:\STUDYCONTENT\Pycharm\yolov5-master\runs\train\5mNAMA_w5m_hypHi_Mulit_1.1_14+12\weights/best.pt  --name 5mNAM_1.100_14+12_car --source D:\StuData\tomato\采集20221220\小车手机\ --imgsz 1200 --hide-labels --conf-thres 0.6 --save-conf
 
 python detect.py --weights E:\STUDYCONTENT\Pycharm\yolov5-master\runs\train\5mNAMA_w5m_hypHi_Mulit_1.1_14+12\weights/best.pt --name 5mNAM_1.100_14+12-coco --source datasets/coco128/images/train2017 --imgsz 1200 --hide-labels --conf-thres 0.6 --save-txt --save-conf --save-crop --nosave
@@ -16,14 +18,24 @@ python val.py --weights E:\STUDYCONTENT\Pycharm\yolov5-master\runs\train\5mNAMA_
 
 5mNAMA_w5m_hypHi_Mulit_1_14+12
 
+------
+
 集成测试
 python detect.py --weights runs\train\5mCBAM_w5m_hypHi_Multi_1_14+9\weights\best.pt weights/yolov5m.pt  --source D:\StuData\tomato\采集20221220\小车手机\ --imgsz 1200 --hide-labels --conf-thres 0.4
 
 
-python export.py --weights runs/train/5mNAMC3_1/weights/best.pt --include onnx  --half --device 0
+------
 
-python export.py --weights runs/train/5mNAMC3_1/weights/best.pt --include openvino --data data/tomato.yaml --int8
+----- export -----
 
+python export.py --weights runs/train/CBAMC3-NAMA/weights/best.pt --include onnx  --half --device 0
+
+python export.py --weights runs/train/CBAMC3-NAMA/weights/best_after.pt --include openvino --data data/tomato.yaml --int8
+
+------------------
+
+
+----- 测试量化模型 -----
 
 python benchmarks.py --weights runs/train/5mNAMC3_w5m_hypHi_Mulit_1_14+12/weights/best.pt --img 640 --data data/tomato.yaml
 
@@ -46,3 +58,6 @@ python val.py --weights runs\train\5mNAMC3\weights\best_openvino_model_int8\ --n
 
 
 D:\StuData\tomato\dataset_factory\background\coco_2\images
+
+
+-----------------

@@ -1,5 +1,7 @@
+# 该文件是用于修改一个文件夹下所有图片像素大小的程序, 设置阈值, 如果超过阈值则修改到一个固定大小.
 import os
 import cv2
+
 
 def resize_image(image, target_width, target_height):
     # 获取原始图像的宽度和高度
@@ -26,14 +28,14 @@ def save_fix(target_width, target_height, img_folder, save_path):
     if not os.path.exists(save_path):
         os.makedirs(save_path)
 
-    img_ilst = os.listdir(img_folder)
-    img_num = len(img_ilst)
+    img_list = os.listdir(img_folder)
+    img_num = len(img_list)
 
     for img_i in range(img_num):
-        if img_ilst[img_i] == 'labels':
+        if img_list[img_i] == 'labels':
             continue
 
-        img_path = os.path.join(img_folder, img_ilst[img_i])
+        img_path = os.path.join(img_folder, img_list[img_i])
         image = cv2.imread(img_path)
 
         # 调用图像缩放函数

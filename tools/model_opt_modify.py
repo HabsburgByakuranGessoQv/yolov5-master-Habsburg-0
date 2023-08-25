@@ -1,3 +1,4 @@
+# 该程序是一个修改pt模型文件中, opt参数的程序, 可以自己根据需要修改.
 import torch
 if __name__ == '__main__':
     model_path = r'E:\STUDYCONTENT\Pycharm\yolov5-master\runs\train\5mCBAM_w5m6_hypHi_Mulit_1_14+12\weights\last.pt'

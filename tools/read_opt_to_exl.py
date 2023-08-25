@@ -49,7 +49,8 @@ if __name__ == '__main__':
         r'E:\STUDYCONTENT\Pycharm\yolov5-master\runs\train\5mCBAM_w5m_hypHi_Multi_1_5+8-coco\opt.yaml'
 
     data_yaml = read_yaml_all(yaml_path_main)
-    keys_main = ['cfg', 'weights', 'epochs', 'batch_size', 'imgsz', 'multi_scale', 'optimizer', 'workers', 'cos_lr', 'freeze', 'label_smoothing', 'quad']
+    keys_main = ['cfg', 'weights', 'epochs', 'batch_size', 'imgsz', 'multi_scale', 'optimizer', 'workers', 'cos_lr',
+                 'freeze', 'label_smoothing', 'quad']
     values_main = list(map(data_yaml.get, keys_main))
     # print(values_main)
 
@@ -58,4 +59,3 @@ if __name__ == '__main__':
     # data_exl = xlrd.open_workbook(exl_path_main)
     # table = data_exl.sheets()[0]  # 通过索引顺序获取
     # print(table)
-
